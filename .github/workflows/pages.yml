@@ -23,12 +23,26 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install image optimizer
+        run: python -m pip install --disable-pip-version-check pillow
+
+      - name: Build lightweight preview and migrate approved assets
+        run: python scripts/build_preview.py
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
+
       - name: Upload static site
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
-          path: .
+          path: dist
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
